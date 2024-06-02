@@ -19,12 +19,13 @@ public class ClientService {
     }
 
     public boolean deleteClient(Long id) {
-        try {
-            clientRepository.deleteById(id);
+        Client clientToDelete = clientRepository.findById(id).orElse(null);
+        if (clientToDelete != null) {
+            clientToDelete.setStatus(false);
+            clientRepository.save(clientToDelete);
             return true;
-        } catch (Exception e) {
-           return false;
         }
+        return false;
     }
 
     public Client updateClient(Long id, Client client) {
@@ -48,7 +49,11 @@ public class ClientService {
     }
 
     public List<Client> findAll() {
-        return clientRepository.findAll();
+        return clientRepository.findByStatus(true);
+    }
+
+    public Client findByDni(String dni) {
+        return clientRepository.findByDni(dni).orElse(null);
     }
 }
 
