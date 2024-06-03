@@ -18,26 +18,40 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"dni"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"dni"}), 
+@UniqueConstraint(columnNames = {"email"}), @UniqueConstraint(columnNames = {"phone"})
+})
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false)
     private String dni;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column( length = 20, nullable = false)
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(length = 10)
+    @Column(nullable = true)
     private String secondName;
 
-    @Column(length = 10)
+    @Column(nullable = true)
     private String secondLastName;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String dniType;
 
     @Column(columnDefinition = "boolean default true")
     @Builder.Default

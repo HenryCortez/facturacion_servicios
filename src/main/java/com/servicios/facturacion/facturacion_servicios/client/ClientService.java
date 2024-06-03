@@ -43,6 +43,18 @@ public class ClientService {
             if (client.getSecondLastName() != null) {
                 clientToUpdate.setSecondLastName(client.getSecondLastName());
             }
+            if (client.getAddress() != null) {
+                clientToUpdate.setAddress(client.getAddress());
+            }
+            if (client.getDniType() != null) {
+                clientToUpdate.setDniType(client.getDniType());
+            }
+            if (client.getPhone() != null) {
+                clientToUpdate.setPhone(client.getPhone());
+            }
+            if (client.getEmail() != null) {
+                clientToUpdate.setEmail(client.getEmail());
+            }
             return clientRepository.save(clientToUpdate);
         }
         return null;
@@ -54,6 +66,15 @@ public class ClientService {
 
     public Client findByDni(String dni) {
         return clientRepository.findByDni(dni).orElse(null);
+    }
+
+
+    public Client findByPhone(String phone) {
+        return clientRepository.findByPhone(phone).orElse(null);
+    }
+
+    public Client findByEmail(String email) {
+        return clientRepository.findByEmail(email).orElse(null);
     }
 }
 
