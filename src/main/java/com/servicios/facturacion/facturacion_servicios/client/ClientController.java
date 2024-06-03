@@ -40,6 +40,17 @@ public class ClientController {
         return clientService.findByDni(dni);
     }
     
+
+    @GetMapping("/phone/{phone}")
+    public Client getClientByPhone(@PathVariable String phone) {
+        return clientService.findByPhone(phone);
+    }
+
+    @GetMapping("/email/{email}")
+    public Client getClientByEmail(@PathVariable String email) {
+        return clientService.findByEmail(email);
+    }
+
     @PostMapping()
     public Client saveClient(@RequestBody Client client) {
         return clientService.saveClient(client);
