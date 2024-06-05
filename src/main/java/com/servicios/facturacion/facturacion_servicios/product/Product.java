@@ -41,7 +41,7 @@ public class Product {
     @Column(nullable = false)
     private float price;
     @ManyToOne(targetEntity = Iva.class)
-    @JoinColumn(name = "iva_Id", nullable = false)
+    @JoinColumn(name = "iva_Id", nullable = true)
     private Iva iva;
     @Column(columnDefinition = "boolean default true")
     @Builder.Default

@@ -3,13 +3,14 @@ package com.servicios.facturacion.facturacion_servicios.product.category;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -22,32 +23,38 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping()
-    public List<Category> findAll() {
-        return categoryService.findAll();
+    public ResponseEntity<List<Category>> findAll() {
+        return ResponseEntity.ok(categoryService.findAll());
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id);
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @GetMapping("/name/{name}")
-    public Category getCategoryByName(@PathVariable String name) {
-        return categoryService.getCategoryByName(name);
+    public ResponseEntity<Category> getCategoryByName(@PathVariable String name) {
+        return ResponseEntity.ok(categoryService.getCategoryByName(name));
     }
 
     @PostMapping()
-    public Category saveCategory(@RequestBody Category category) {
-        return categoryService.saveCategory(category);
+    public ResponseEntity<Category> saveCategory(@RequestParam("name") String name, @RequestParam("description") String description) {
+        Category category = new Category();
+        category.setName(name);
+        category.setDescription(description);
+        return ResponseEntity.ok(categoryService.saveCategory(category));
     }
 
     @PutMapping("/{id}")
-    public Category putMethodName(@PathVariable Long id, @RequestBody Category entity) {
-        return categoryService.updateCategory(id, entity);
+    public ResponseEntity<Category> putMethodName(@PathVariable Long id, @RequestParam("name") String name, @RequestParam("description") String description) {
+        Category entity = new Category();
+        entity.setName(name);
+        entity.setDescription(description);
+        return ResponseEntity.ok(categoryService.updateCategory(id, entity));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
+    public ResponseEntity<Boolean> deleteCategory(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.deleteCategory(id));
     }
 }

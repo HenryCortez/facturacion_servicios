@@ -62,10 +62,10 @@ public class AuthService {
         return false;
     }
 
-    public boolean changePasswordUser(String username, User entity) {
+    public boolean changePasswordUser(String username, String password) {
         User user = userRepository.findByUsername(username).orElse(null);
         if (user != null) {
-            user.setPassword(passwordEncoder.encode(entity.getPassword()));
+            user.setPassword(passwordEncoder.encode(password));
             userRepository.save(user);
             return true;
         }
