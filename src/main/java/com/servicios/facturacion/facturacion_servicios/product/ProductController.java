@@ -27,7 +27,7 @@ public class ProductController {
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private IvaRepository  ivaRepository;
+    private IvaRepository ivaRepository;
 
     @GetMapping()
     public ResponseEntity<List<Product>> findAll() {
@@ -45,19 +45,25 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<Product> saveProduct(@RequestParam("name") String name, @RequestParam("category") Long category, @RequestParam("imagen") byte[] imagen, @RequestParam("stock") int stock, @RequestParam("price") float price, @RequestParam("iva") Long iva) {
+    public ResponseEntity<Product> saveProduct(@RequestParam("name") String name,
+            @RequestParam("category") Long category, @RequestParam("imagen") byte[] imagen,
+            @RequestParam("stock") int stock, @RequestParam("price") float price) {
         Product product = new Product();
         product.setName(name);
         product.setCategory(categoryRepository.findById(category).orElse(null));
         product.setImagen(imagen);
         product.setStock(stock);
         product.setPrice(price);
-        product.setIva(ivaRepository.findById(iva).orElse(null));
         return ResponseEntity.ok(productService.saveProduct(product));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestParam("name") String name, @RequestParam("category") Long category, @RequestParam("imagen") byte[] imagen, @RequestParam("stock") int stock, @RequestParam("price") float price) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id,
+            @RequestParam(required = false, name = "name") String name,
+            @RequestParam(required = false, name = "category") Long category,
+            @RequestParam(required = false, name = "imagen") byte[] imagen,
+            @RequestParam(required = false, name = "stock") int stock,
+            @RequestParam(required = false, name = "price") float price) {
         Product entity = new Product();
         entity.setName(name);
         entity.setCategory(categoryRepository.findById(category).orElse(null));

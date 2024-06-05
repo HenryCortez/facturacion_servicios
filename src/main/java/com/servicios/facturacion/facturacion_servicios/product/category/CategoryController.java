@@ -46,7 +46,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> putMethodName(@PathVariable Long id, @RequestParam("name") String name, @RequestParam("description") String description) {
+    public ResponseEntity<Category> putMethodName(@PathVariable Long id, @RequestParam(required = false, name = "name") String name, @RequestParam(required = false, name ="description") String description) {
         Category entity = new Category();
         entity.setName(name);
         entity.setDescription(description);

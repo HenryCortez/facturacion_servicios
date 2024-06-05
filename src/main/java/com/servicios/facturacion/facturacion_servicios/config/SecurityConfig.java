@@ -40,6 +40,8 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.DELETE, "/api/client/**").hasAuthority("admin")
                             .requestMatchers(HttpMethod.GET, "/api/client/**").hasAnyAuthority("admin", "cajero")
 
+                            .requestMatchers("/api/productos/**").permitAll()
+                            .requestMatchers("/api/category/**").permitAll()
                             .anyRequest().authenticated())
                     .sessionManagement(sessionManagement -> 
                     sessionManagement

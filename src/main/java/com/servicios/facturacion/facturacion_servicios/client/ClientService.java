@@ -46,9 +46,6 @@ public class ClientService {
             if (client.getAddress() != null) {
                 clientToUpdate.setAddress(client.getAddress());
             }
-            if (client.getDniType() != null) {
-                clientToUpdate.setDniType(client.getDniType());
-            }
             if (client.getPhone() != null) {
                 clientToUpdate.setPhone(client.getPhone());
             }
