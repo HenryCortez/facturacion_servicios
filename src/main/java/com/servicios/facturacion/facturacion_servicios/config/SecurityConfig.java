@@ -33,7 +33,7 @@ public class SecurityConfig {
                             .requestMatchers("/auth/login").permitAll()
                             .requestMatchers("/auth/register").hasAuthority("admin")
                             .requestMatchers("/auth/{username}").hasAuthority("admin")
-                            
+                            .requestMatchers("/auth").permitAll()
 
                             .requestMatchers(HttpMethod.POST, "/api/client/**").hasAnyAuthority("admin", "cajero")
                             .requestMatchers(HttpMethod.PUT, "/api/client/**").hasAuthority("admin")

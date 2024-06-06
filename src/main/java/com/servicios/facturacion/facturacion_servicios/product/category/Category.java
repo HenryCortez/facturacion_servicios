@@ -1,7 +1,9 @@
 package com.servicios.facturacion.facturacion_servicios.product.category;
 
-import java.util.List;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.servicios.facturacion.facturacion_servicios.product.Product;
 
 import jakarta.persistence.CascadeType;
@@ -39,5 +41,6 @@ public class Category {
     @Builder.Default
     private boolean status = true;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products;
+    @JsonManagedReference
+    private Set<Product> products;
 }

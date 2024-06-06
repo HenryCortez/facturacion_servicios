@@ -1,5 +1,6 @@
 package com.servicios.facturacion.facturacion_servicios.product;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.servicios.facturacion.facturacion_servicios.product.category.Category;
 import com.servicios.facturacion.facturacion_servicios.product.iva.Iva;
 
@@ -32,16 +33,17 @@ public class Product {
     private String name;
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_Id", nullable = false)
+    @JsonBackReference
     private Category category;
     @Lob
-    @Column(nullable = false)
-    private byte[] imagen;
+    @Column(name = "imagen", columnDefinition = "TEXT")
+    private String imagen;
     @Column(nullable = false)
     private int stock;
     @Column(nullable = false)
     private float price;
     @ManyToOne(targetEntity = Iva.class)
-    @JoinColumn(name = "iva_Id", nullable = true, columnDefinition = "bigint default 2")
+    @JoinColumn(name = "iva_Id", columnDefinition = "bigint default 2")
     private Iva iva;
     @Column(columnDefinition = "boolean default true")
     @Builder.Default

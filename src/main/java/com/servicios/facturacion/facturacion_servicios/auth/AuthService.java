@@ -1,5 +1,7 @@
 package com.servicios.facturacion.facturacion_servicios.auth;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,10 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder  passwordEncoder;
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
     public AuthResponse  login(LoginRequest entity) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(entity.getUsername(), entity.getPassword()));
