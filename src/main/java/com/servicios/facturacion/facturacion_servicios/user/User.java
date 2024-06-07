@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private String username;
     @Column(nullable = false)
     private String password;
-    @ManyToOne(targetEntity = Role.class)
+    @ManyToOne()
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
     @Column(columnDefinition = "boolean default true")

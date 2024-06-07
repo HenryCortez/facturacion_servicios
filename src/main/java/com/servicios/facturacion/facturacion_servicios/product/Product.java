@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
+
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -31,18 +31,17 @@ public class Product {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @ManyToOne(targetEntity = Category.class)
+    @ManyToOne()
     @JoinColumn(name = "category_Id", nullable = false)
     @JsonBackReference
     private Category category;
-    @Lob
-    @Column(name = "imagen", columnDefinition = "TEXT")
+    @Column(name = "imagen")
     private String imagen;
     @Column(nullable = false)
     private int stock;
     @Column(nullable = false)
     private float price;
-    @ManyToOne(targetEntity = Iva.class)
+    @ManyToOne()
     @JoinColumn(name = "iva_Id", columnDefinition = "bigint default 2")
     private Iva iva;
     @Column(columnDefinition = "boolean default true")

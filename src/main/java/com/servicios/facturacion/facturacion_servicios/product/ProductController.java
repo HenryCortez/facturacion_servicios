@@ -1,7 +1,6 @@
 package com.servicios.facturacion.facturacion_servicios.product;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.servicios.facturacion.facturacion_servicios.aws.S3Service;
 import com.servicios.facturacion.facturacion_servicios.product.category.CategoryRepository;
 import com.servicios.facturacion.facturacion_servicios.product.iva.Iva;
 import com.servicios.facturacion.facturacion_servicios.product.iva.IvaRepository;
@@ -31,6 +31,9 @@ public class ProductController {
     private CategoryRepository categoryRepository;
     @Autowired
     private IvaRepository ivaRepository;
+    @Autowired
+    private S3Service s3Service;
+
 
     @GetMapping()
     public ResponseEntity<List<Product>> findAll() {
@@ -56,7 +59,7 @@ public class ProductController {
             Product product = new Product();
             product.setName(name);
             product.setCategory(categoryRepository.findById(category).orElse(null));
-            product.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
+            product.setImagen(s3Service.uploadFile(imagen));
             product.setStock(stock);
             product.setPrice(price);
             product.setIva(ivaRepository.findById(2L).orElse(null));
@@ -78,7 +81,7 @@ public class ProductController {
         Product entity = new Product();
         entity.setName(name);
         entity.setCategory(categoryRepository.findById(category).orElse(null));
-        entity.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
+        entity.setImagen(s3Service.uploadFile(imagen));
         entity.setStock(stock);
         entity.setPrice(price);
         return ResponseEntity.ok(productService.updateProduct(id, entity));
