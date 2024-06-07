@@ -1,5 +1,6 @@
 package com.servicios.facturacion.facturacion_servicios.product;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.servicios.facturacion.facturacion_servicios.aws.S3Service;
 import com.servicios.facturacion.facturacion_servicios.product.category.CategoryRepository;
 import com.servicios.facturacion.facturacion_servicios.product.iva.Iva;
 import com.servicios.facturacion.facturacion_servicios.product.iva.IvaRepository;
@@ -28,6 +31,9 @@ public class ProductController {
     private CategoryRepository categoryRepository;
     @Autowired
     private IvaRepository ivaRepository;
+    @Autowired
+    private S3Service s3Service;
+
 
     @GetMapping()
     public ResponseEntity<List<Product>> findAll() {
@@ -46,28 +52,36 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<Product> saveProduct(@RequestParam("name") String name,
-            @RequestParam("category") Long category, @RequestParam("imagen") byte[] imagen,
+            @RequestParam("category") Long category, @RequestParam("imagen") MultipartFile imagen,
             @RequestParam("stock") int stock, @RequestParam("price") float price) {
-        Product product = new Product();
-        product.setName(name);
-        product.setCategory(categoryRepository.findById(category).orElse(null));
-        product.setImagen(imagen);
-        product.setStock(stock);
-        product.setPrice(price);
-        return ResponseEntity.ok(productService.saveProduct(product));
+        try {
+            System.out.println(imagen.getBytes());
+            Product product = new Product();
+            product.setName(name);
+            product.setCategory(categoryRepository.findById(category).orElse(null));
+            product.setImagen(s3Service.uploadFile(imagen));
+            product.setStock(stock);
+            product.setPrice(price);
+            product.setIva(ivaRepository.findById(2L).orElse(null));
+            return ResponseEntity.ok(productService.saveProduct(product));
+            // Ahora puedes usar el array de bytes...
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id,
             @RequestParam(required = false, name = "name") String name,
             @RequestParam(required = false, name = "category") Long category,
-            @RequestParam(required = false, name = "imagen") byte[] imagen,
+            @RequestParam(required = false, name = "imagen") MultipartFile imagen,
             @RequestParam(required = false, name = "stock") int stock,
-            @RequestParam(required = false, name = "price") float price) {
+            @RequestParam(required = false, name = "price") float price) throws IOException {
         Product entity = new Product();
         entity.setName(name);
         entity.setCategory(categoryRepository.findById(category).orElse(null));
-        entity.setImagen(imagen);
+        entity.setImagen(s3Service.uploadFile(imagen));
         entity.setStock(stock);
         entity.setPrice(price);
         return ResponseEntity.ok(productService.updateProduct(id, entity));
