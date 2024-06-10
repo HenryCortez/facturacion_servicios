@@ -1,5 +1,6 @@
 package com.servicios.facturacion.facturacion_servicios.sales.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.servicios.facturacion.facturacion_servicios.product.Product;
 
 import jakarta.persistence.Column;
@@ -29,6 +30,7 @@ public class SalesDetails {
 
     @ManyToOne
     @JoinColumn(name = "sale_id", nullable = false)
+    @JsonBackReference
     private Sale sales;
 
     @ManyToOne

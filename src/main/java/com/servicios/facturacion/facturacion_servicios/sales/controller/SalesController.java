@@ -1,0 +1,54 @@
+package com.servicios.facturacion.facturacion_servicios.sales.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+import com.servicios.facturacion.facturacion_servicios.product.Product;
+import com.servicios.facturacion.facturacion_servicios.sales.dto.SaleDTO;
+import com.servicios.facturacion.facturacion_servicios.sales.model.Sale;
+import com.servicios.facturacion.facturacion_servicios.sales.service.SalesService;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/sales")
+@RequiredArgsConstructor
+public class SalesController {
+
+    @Autowired
+    private SalesService salesService;
+
+    @GetMapping()
+    public List<Sale> getAllActiveSales() {
+        return salesService.getAllActiveSales();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Sale> getSaleById(@PathVariable Long id) {
+        Optional<Sale> sale = salesService.getSaleById(id);
+        if (sale.isPresent()) {
+            return ResponseEntity.ok(sale.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Sale> createSale(@RequestBody SaleDTO saleDTO) {
+        Sale createdSale = salesService.createSale(saleDTO);
+        return ResponseEntity.ok(createdSale);
+    }
+
+}

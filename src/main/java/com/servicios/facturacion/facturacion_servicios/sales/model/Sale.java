@@ -2,6 +2,7 @@ package com.servicios.facturacion.facturacion_servicios.sales.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.servicios.facturacion.facturacion_servicios.client.Client;
 
 import jakarta.persistence.CascadeType;
@@ -49,5 +50,6 @@ public class Sale {
     private boolean status = true;
 
     @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<SalesDetails> salesDetails;
 }
