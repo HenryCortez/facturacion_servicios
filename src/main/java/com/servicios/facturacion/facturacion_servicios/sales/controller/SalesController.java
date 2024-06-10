@@ -3,7 +3,7 @@ package com.servicios.facturacion.facturacion_servicios.sales.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.servicios.facturacion.facturacion_servicios.product.Product;
-import com.servicios.facturacion.facturacion_servicios.sales.dto.SaleDTO;
+import com.servicios.facturacion.facturacion_servicios.sales.dto.SaleRequestDTO;
 import com.servicios.facturacion.facturacion_servicios.sales.model.Sale;
 import com.servicios.facturacion.facturacion_servicios.sales.service.SalesService;
 
@@ -46,8 +46,8 @@ public class SalesController {
     }
 
     @PostMapping
-    public ResponseEntity<Sale> createSale(@RequestBody SaleDTO saleDTO) {
-        Sale createdSale = salesService.createSale(saleDTO);
+    public ResponseEntity<Sale> createSale(@RequestBody SaleRequestDTO saleRequestDTO) {
+        Sale createdSale = salesService.createSale(saleRequestDTO);
         return ResponseEntity.ok(createdSale);
     }
 
