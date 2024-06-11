@@ -6,5 +6,4 @@ import lombok.Data;
 public class SaleDetailDTO {
     private Long productId;
     private int quantity;
-    private float price;
 }

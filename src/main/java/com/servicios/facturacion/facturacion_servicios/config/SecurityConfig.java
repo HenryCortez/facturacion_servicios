@@ -44,7 +44,8 @@ public class SecurityConfig {
                             .requestMatchers("/api/category/**").permitAll()
 
 
-                            .requestMatchers("api/sales/**").permitAll()
+                            .requestMatchers("/api/sales/**").permitAll()
+                            .requestMatchers("/api/sales").permitAll()
                             .anyRequest().authenticated())
                     .sessionManagement(sessionManagement -> 
                     sessionManagement
