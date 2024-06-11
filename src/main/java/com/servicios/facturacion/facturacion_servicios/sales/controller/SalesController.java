@@ -4,11 +4,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.servicios.facturacion.facturacion_servicios.product.Product;
 import com.servicios.facturacion.facturacion_servicios.sales.dto.SaleRequestDTO;
+import com.servicios.facturacion.facturacion_servicios.sales.exceptions.CustomBusinessException;
 import com.servicios.facturacion.facturacion_servicios.sales.model.Sale;
 import com.servicios.facturacion.facturacion_servicios.sales.service.SalesService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,10 +47,32 @@ public class SalesController {
         }
     }
 
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<?> getSalesByClientId(@PathVariable Long clientId) {
+        try {
+            List<Sale> sales = salesService.getSalesByClientId(clientId);
+            return ResponseEntity.ok(sales);
+        } catch (CustomBusinessException e) {
+            // Captura excepciones de negocio personalizadas
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            // Captura cualquier otra excepción no manejada específicamente
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<Sale> createSale(@RequestBody SaleRequestDTO saleRequestDTO) {
-        Sale createdSale = salesService.createSale(saleRequestDTO);
-        return ResponseEntity.ok(createdSale);
+    public ResponseEntity<?> createSale(@RequestBody SaleRequestDTO saleRequestDTO) {
+        try {
+            Sale createdSale = salesService.createSale(saleRequestDTO);
+            return ResponseEntity.ok(createdSale);
+        } catch (CustomBusinessException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
 }

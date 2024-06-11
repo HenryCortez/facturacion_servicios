@@ -36,34 +36,46 @@ public class SalesService {
         return salesRepository.findByIdAndStatusTrue(id);
     }
 
-    public Sale createSale(SaleRequestDTO saleRequestDTO) {
-        // Find client
-        Client client = clientRepository.findById(saleRequestDTO.getClientId())
-                .orElseThrow(() -> new RuntimeException("Client not found"));
+    public List<Sale> getSalesByClientId(Long clientId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
         if (!client.isStatus()) {
-            throw new RuntimeException("Client is not active");
+            throw new RuntimeException("Client no está activo");
         }
-        // Create sale
+
+        return salesRepository.findByClientIdAndStatusTrue(clientId);
+    }
+
+    public Sale createSale(SaleRequestDTO saleRequestDTO) {
+        Client client;
+        if (saleRequestDTO.getClientId() == -1) {
+            client = clientRepository.findById(0L)
+                    .orElseThrow(() -> new RuntimeException("Consumidor final no encontrado"));
+        } else {
+            client = clientRepository.findById(saleRequestDTO.getClientId())
+                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+            if (!client.isStatus()) {
+                throw new RuntimeException("Cliente no está activo");
+            }
+        }
+
         Sale sale = new Sale();
         sale.setClient(client);
         sale.setDateSale(LocalDateTime.now());
         sale.setStatus(true);
 
-        // Create and calculate sale details
         List<SalesDetails> saleDetailsList = SalesServiceHelper.createSaleDetails(sale, saleRequestDTO.getSaleDetails(),
                 productRepository);
         float[] totals = SalesServiceHelper.calculateTotals(saleDetailsList);
         sale.setSubtotal(totals[0]);
         sale.setTotal(totals[1]);
 
-        // Save sale to get the ID
         salesRepository.save(sale);
 
-        // Save all sale details
         saleDetailsList.forEach(detail -> detail.setSales(sale));
         salesDetailsRepository.saveAll(saleDetailsList);
 
-        // Set the sale details to the sale object
         sale.setSalesDetails(saleDetailsList);
 
         return sale;

@@ -10,10 +10,10 @@ public class CustomBusinessException extends ResponseStatusException {
     }
 
     public static CustomBusinessException productInactive(Long productId) {
-        return new CustomBusinessException(HttpStatus.BAD_REQUEST, "Product with ID " + productId + " is inactive or deleted");
+        return new CustomBusinessException(HttpStatus.BAD_REQUEST, "Producto con ID: " + productId + " esta inactivo o no existe");
     }
 
     public static CustomBusinessException insufficientStock(Long productId) {
-        return new CustomBusinessException(HttpStatus.BAD_REQUEST, "Insufficient stock for product with ID " + productId);
+        return new CustomBusinessException(HttpStatus.BAD_REQUEST, "Insuficiente stock para el producto con ID: " + productId);
     }
 }

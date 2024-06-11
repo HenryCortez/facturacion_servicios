@@ -21,7 +21,7 @@ public class SalesServiceHelper {
 
         for (SaleDetailDTO detailDTO : aggregatedDetails.values()) {
             Product product = productRepository.findById(detailDTO.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
             if (!product.isActive()) {
                 throw CustomBusinessException.productInactive(detailDTO.getProductId());

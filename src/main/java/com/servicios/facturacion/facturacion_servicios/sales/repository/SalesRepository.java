@@ -11,5 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface SalesRepository extends JpaRepository<Sale, Long> {
     List<Sale> findByStatusTrue();
     Optional<Sale> findByIdAndStatusTrue(Long id);
+    List<Sale> findByClientIdAndStatusTrue(Long clientId);
     
 }
