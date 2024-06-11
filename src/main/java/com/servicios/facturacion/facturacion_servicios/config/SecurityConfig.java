@@ -34,7 +34,7 @@ public class SecurityConfig {
                             .requestMatchers("/auth/register").hasAuthority("admin")
                             .requestMatchers("/auth/{username}").hasAuthority("admin")
                             .requestMatchers("/auth").permitAll()
-
+                            
                             .requestMatchers(HttpMethod.POST, "/api/client/**").hasAnyAuthority("admin", "cajero")
                             .requestMatchers(HttpMethod.PUT, "/api/client/**").hasAuthority("admin")
                             .requestMatchers(HttpMethod.DELETE, "/api/client/**").hasAuthority("admin")
@@ -42,6 +42,10 @@ public class SecurityConfig {
 
                             .requestMatchers("/api/productos/**").permitAll()
                             .requestMatchers("/api/category/**").permitAll()
+
+
+                            .requestMatchers("/api/sales/**").permitAll()
+                            .requestMatchers("/api/sales").permitAll()
                             .anyRequest().authenticated())
                     .sessionManagement(sessionManagement -> 
                     sessionManagement
