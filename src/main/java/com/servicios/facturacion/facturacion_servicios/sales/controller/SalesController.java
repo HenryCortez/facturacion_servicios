@@ -1,8 +1,6 @@
 package com.servicios.facturacion.facturacion_servicios.sales.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
-import com.servicios.facturacion.facturacion_servicios.product.Product;
 import com.servicios.facturacion.facturacion_servicios.sales.dto.SaleRequestDTO;
 import com.servicios.facturacion.facturacion_servicios.sales.exceptions.CustomBusinessException;
 import com.servicios.facturacion.facturacion_servicios.sales.model.Sale;
@@ -15,11 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -54,10 +50,9 @@ public class SalesController {
             List<Sale> sales = salesService.getSalesByClientId(clientId);
             return ResponseEntity.ok(sales);
         } catch (CustomBusinessException e) {
-            // Captura excepciones de negocio personalizadas
+            
             return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
         } catch (Exception e) {
-            // Captura cualquier otra excepción no manejada específicamente
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred: " + e.getMessage());
         }
@@ -69,8 +64,10 @@ public class SalesController {
             LocalDate localDate = LocalDate.parse(date);
             List<Sale> sales = salesService.getSalesByDate(localDate);
             return ResponseEntity.ok(sales);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+        } catch (CustomBusinessException e) {
+            throw CustomBusinessException.invalidDateFormat();
+        } catch (Exception e) {
+            throw CustomBusinessException.errorFetchingSalesByDate();
         }
     }
 
@@ -82,8 +79,10 @@ public class SalesController {
             LocalDate end = LocalDate.parse(endDate);
             List<Sale> sales = salesService.getSalesByDateRange(start, end);
             return ResponseEntity.ok(sales);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+        } catch (CustomBusinessException e) {
+            throw CustomBusinessException.invalidDateFormat();
+        } catch (Exception e) {
+            throw CustomBusinessException.errorFetchingSalesByDateRange();
         }
     }
 

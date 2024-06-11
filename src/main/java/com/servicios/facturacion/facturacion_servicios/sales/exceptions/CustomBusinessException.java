@@ -16,4 +16,15 @@ public class CustomBusinessException extends ResponseStatusException {
     public static CustomBusinessException insufficientStock(Long productId) {
         return new CustomBusinessException(HttpStatus.BAD_REQUEST, "Insuficiente stock para el producto con ID: " + productId);
     }
+    public static CustomBusinessException invalidDateFormat() {
+        return new CustomBusinessException(HttpStatus.BAD_REQUEST, "Formato de fecha inválido.");
+    }
+    
+    public static CustomBusinessException errorFetchingSalesByDate() {
+        return new CustomBusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al obtener las ventas por la fecha especificada.");
+    }
+    
+    public static CustomBusinessException errorFetchingSalesByDateRange() {
+        return new CustomBusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al obtener las ventas por el rango de fechas especificado.");
+    }
 }

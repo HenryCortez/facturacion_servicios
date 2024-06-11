@@ -58,7 +58,7 @@ public class SalesService {
 
     public Sale createSale(SaleRequestDTO saleRequestDTO) {
         Client client;
-        if (saleRequestDTO.getClientId() == -1) {
+        if (saleRequestDTO.getClientId() == 0) {
             client = clientRepository.findById(0L)
                     .orElseThrow(() -> new RuntimeException("Consumidor final no encontrado"));
         } else {

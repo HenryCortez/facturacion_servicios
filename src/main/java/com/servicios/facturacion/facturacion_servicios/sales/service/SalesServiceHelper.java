@@ -38,9 +38,8 @@ public class SalesServiceHelper {
             saleDetail.setSubtotal(product.getPrice() * detailDTO.getQuantity());
 
             saleDetailsList.add(saleDetail);
-
-            product.setStock(product.getStock() - detailDTO.getQuantity());
-            productRepository.save(product);
+            /* product.setStock(product.getStock() - detailDTO.getQuantity());
+            productRepository.save(product); */
         }
 
         return saleDetailsList;
