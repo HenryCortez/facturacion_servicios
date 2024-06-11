@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +27,6 @@ public class AuthController {
         return ResponseEntity.ok(authService.findAll());
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(value = "login")
     public ResponseEntity<AuthResponse> login(@RequestParam("username") String username, @RequestParam("password") String password) {
         LoginRequest entity = new LoginRequest();
