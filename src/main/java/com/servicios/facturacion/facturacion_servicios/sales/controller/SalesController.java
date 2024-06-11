@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +60,30 @@ public class SalesController {
             // Captura cualquier otra excepción no manejada específicamente
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<Sale>> getSalesByDate(@PathVariable String date) {
+        try {
+            LocalDate localDate = LocalDate.parse(date);
+            List<Sale> sales = salesService.getSalesByDate(localDate);
+            return ResponseEntity.ok(sales);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/date-range")
+    public ResponseEntity<List<Sale>> getSalesByDateRange(@RequestParam String startDate,
+            @RequestParam String endDate) {
+        try {
+            LocalDate start = LocalDate.parse(startDate);
+            LocalDate end = LocalDate.parse(endDate);
+            List<Sale> sales = salesService.getSalesByDateRange(start, end);
+            return ResponseEntity.ok(sales);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
