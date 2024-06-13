@@ -1,20 +1,24 @@
 package com.servicios.facturacion.facturacion_servicios.product;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.servicios.facturacion.facturacion_servicios.aws.S3Service;
+import com.servicios.facturacion.facturacion_servicios.product.Dto.ProductDto;
 import com.servicios.facturacion.facturacion_servicios.product.category.CategoryRepository;
 import com.servicios.facturacion.facturacion_servicios.product.iva.Iva;
 import com.servicios.facturacion.facturacion_servicios.product.iva.IvaRepository;
@@ -34,7 +38,6 @@ public class ProductController {
     @Autowired
     private S3Service s3Service;
 
-
     @GetMapping()
     public ResponseEntity<List<Product>> findAll() {
         return ResponseEntity.ok(productService.findAll());
@@ -51,17 +54,21 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<Product> saveProduct(@RequestParam("name") String name,
-            @RequestParam("category") Long category, @RequestParam("imagen") MultipartFile imagen,
-            @RequestParam("stock") int stock, @RequestParam("price") float price) {
+    public ResponseEntity<Product> saveProduct(@RequestBody ProductDto productRequest) {
         try {
-            System.out.println(imagen.getBytes());
+            byte[] imageBytes = Base64.getDecoder().decode(productRequest.getImage());
+            // Crea un MultipartFile a partir del array de bytes
+            MultipartFile imagen = new MockMultipartFile(
+                productRequest.getName(), 
+                productRequest.getName()+".jpg", 
+                "image/jpeg",
+                imageBytes);
             Product product = new Product();
-            product.setName(name);
-            product.setCategory(categoryRepository.findById(category).orElse(null));
+            product.setName(productRequest.getName());
+            product.setCategory(categoryRepository.findById(productRequest.getCategory()).orElse(null));
             product.setImagen(s3Service.uploadFile(imagen));
-            product.setStock(stock);
-            product.setPrice(price);
+            product.setStock(productRequest.getStock());
+            product.setPrice(productRequest.getPrice());
             product.setIva(ivaRepository.findById(2L).orElse(null));
             return ResponseEntity.ok(productService.saveProduct(product));
             // Ahora puedes usar el array de bytes...
@@ -93,7 +100,7 @@ public class ProductController {
     }
 
     @PutMapping("/iva")
-    public ResponseEntity<List<Product>> updateIva(@RequestParam("iva") Long iva) {
+    public ResponseEntity<List<Product>> updateIva(@RequestBody() Long iva) {
         Iva ivaEntity = ivaRepository.findById(iva).orElse(null);
         return ResponseEntity.ok(productService.changeAllIva(ivaEntity));
     }
