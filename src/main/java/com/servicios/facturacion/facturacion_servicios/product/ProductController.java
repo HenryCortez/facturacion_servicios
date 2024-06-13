@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +41,10 @@ public class ProductController {
     public ResponseEntity<List<Product>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
+    @GetMapping("/deactivate")
+    public ResponseEntity<List<Product>> findDeactivate() {
+        return ResponseEntity.ok(productService.findDeactivate());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
@@ -59,10 +62,10 @@ public class ProductController {
             byte[] imageBytes = Base64.getDecoder().decode(productRequest.getImage());
             // Crea un MultipartFile a partir del array de bytes
             MultipartFile imagen = new MockMultipartFile(
-                productRequest.getName(), 
-                productRequest.getName()+".jpg", 
-                "image/jpeg",
-                imageBytes);
+                    productRequest.getName(),
+                    productRequest.getName() + ".jpg",
+                    "image/jpeg",
+                    imageBytes);
             Product product = new Product();
             product.setName(productRequest.getName());
             product.setCategory(categoryRepository.findById(productRequest.getCategory()).orElse(null));
@@ -80,18 +83,31 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id,
-            @RequestParam(required = false, name = "name") String name,
-            @RequestParam(required = false, name = "category") Long category,
-            @RequestParam(required = false, name = "imagen") MultipartFile imagen,
-            @RequestParam(required = false, name = "stock") int stock,
-            @RequestParam(required = false, name = "price") float price) throws IOException {
-        Product entity = new Product();
-        entity.setName(name);
-        entity.setCategory(categoryRepository.findById(category).orElse(null));
-        entity.setImagen(s3Service.uploadFile(imagen));
-        entity.setStock(stock);
-        entity.setPrice(price);
-        return ResponseEntity.ok(productService.updateProduct(id, entity));
+            @RequestBody() ProductDto productRequest) throws IOException {
+        byte[] imageBytes;
+        MultipartFile imagen = null;
+        if (productRequest.getImage() != null) {
+            imageBytes = Base64.getDecoder().decode(productRequest.getImage());
+            // Crea un MultipartFile a partir del array de bytes
+            imagen = new MockMultipartFile(
+                    productRequest.getName(),
+                    productRequest.getName() + ".jpg",
+                    "image/jpeg",
+                    imageBytes);
+        }
+
+        Product product = new Product();
+        product.setName(productRequest.getName());
+        if (productRequest.getCategory() != null) {
+            product.setCategory(categoryRepository.findById(productRequest.getCategory()).orElse(null));
+        }
+        if (productRequest.getImage() != null && imagen != null) {
+            product.setImagen(s3Service.uploadFile(imagen));
+        }
+        product.setStock(productRequest.getStock());
+        product.setPrice(productRequest.getPrice());
+        product.setIva(ivaRepository.findById(2L).orElse(null));
+        return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 
     @PutMapping("/activation/{id}")

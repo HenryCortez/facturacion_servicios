@@ -1,7 +1,6 @@
 package com.servicios.facturacion.facturacion_servicios.auth;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -28,19 +28,12 @@ public class AuthController {
     }
 
     @PostMapping(value = "login")
-    public ResponseEntity<AuthResponse> login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        LoginRequest entity = new LoginRequest();
-        entity.setUsername(username);
-        entity.setPassword(password);
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest entity) {
         System.out.println(entity + "\nLogin");
         return ResponseEntity.ok(authService.login(entity));
     }
     @PostMapping(value = "register")
-    public ResponseEntity<AuthResponse> register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("role") String role) {
-        RegisterRequest entity = new RegisterRequest();
-        entity.setUsername(username);
-        entity.setPassword(password);
-        entity.setRole(role);
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest entity) {
         return ResponseEntity.ok(authService.register(entity));
     }
     @DeleteMapping("/{username}")
@@ -50,7 +43,7 @@ public class AuthController {
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<Boolean> updateUser(@PathVariable String username,  @RequestParam("password") String password) {
+    public ResponseEntity<Boolean> updateUser(@PathVariable String username,  @RequestBody String password) {
         
         return ResponseEntity.ok(authService.changePasswordUser(username, password));
     }

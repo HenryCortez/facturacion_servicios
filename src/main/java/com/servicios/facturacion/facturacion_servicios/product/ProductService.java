@@ -65,7 +65,11 @@ public class ProductService {
     }
 
     public List<Product> findAll() {
-        return productRepository.findAll();
+        return productRepository.findByActive(true).orElse(null);
+    }
+
+    public List<Product> findDeactivate() {
+        return productRepository.findByActive(false).orElse(null);
     }
 
     public List<Product> changeAllIva( Iva idIva) {
