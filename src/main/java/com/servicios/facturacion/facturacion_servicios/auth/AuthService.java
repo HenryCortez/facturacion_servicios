@@ -30,21 +30,24 @@ public class AuthService {
     }
 
     public AuthResponse  login(LoginRequest entity) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(entity.getUsername(), entity.getPassword()));
-        User user = userRepository.findByUsername(entity.getUsername()).orElseThrow();
-        if(!user.isStatus()) return null;
-        String token = jwtService.getToken(user);
-        return AuthResponse.builder()
-                .token(token)
-                .build();
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(entity.getUsername(), entity.getPassword()));
+            User user = userRepository.findByUsername(entity.getUsername()).orElseThrow();
+            if(!user.isStatus()) return null;
+            String token = jwtService.getToken(user);
+            return AuthResponse.builder()
+                    .token(token)
+                    .build();
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+        
     }
 
     public AuthResponse register(RegisterRequest entity) {
         Role role = roleRepository.findByRoleName(entity.getRole())
-        .orElse(null);
-        if(role == null) {
-            return null;
-        }
+        .orElseThrow(() -> new IllegalArgumentException("Role not found"));
         User user = User.builder()
                 .username(entity.getUsername())
                 .password(passwordEncoder.encode( entity.getPassword()))
@@ -68,13 +71,16 @@ public class AuthService {
         return false;
     }
 
-    public boolean changePasswordUser(String username, String password) {
+    public AuthResponse changePasswordUser(String username, String password) {
         User user = userRepository.findByUsername(username).orElse(null);
         if (user != null) {
             user.setPassword(passwordEncoder.encode(password));
             userRepository.save(user);
-            return true;
+            String token = jwtService.getToken(user);
+        return AuthResponse.builder()
+                .token(token)
+                .build();
         }
-        return false;
+        return null;
     }
 }

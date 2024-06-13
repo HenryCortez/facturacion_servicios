@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.servicios.facturacion.facturacion_servicios.aws.S3Service;
+import com.servicios.facturacion.facturacion_servicios.product.Dto.IvaDto;
 import com.servicios.facturacion.facturacion_servicios.product.Dto.ProductDto;
 import com.servicios.facturacion.facturacion_servicios.product.category.CategoryRepository;
 import com.servicios.facturacion.facturacion_servicios.product.iva.Iva;
@@ -116,8 +117,8 @@ public class ProductController {
     }
 
     @PutMapping("/iva")
-    public ResponseEntity<List<Product>> updateIva(@RequestBody() Long iva) {
-        Iva ivaEntity = ivaRepository.findById(iva).orElse(null);
+    public ResponseEntity<List<Product>> updateIva(@RequestBody() IvaDto iva) {
+        Iva ivaEntity = ivaRepository.findById(iva.getId()).orElse(null);
         return ResponseEntity.ok(productService.changeAllIva(ivaEntity));
     }
 }
