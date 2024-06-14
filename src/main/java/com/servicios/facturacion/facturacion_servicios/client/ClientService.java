@@ -19,12 +19,13 @@ public class ClientService {
     }
 
     public boolean deleteClient(Long id) {
-        try {
-            clientRepository.deleteById(id);
+        Client clientToDelete = clientRepository.findById(id).orElse(null);
+        if (clientToDelete != null) {
+            clientToDelete.setStatus(false);
+            clientRepository.save(clientToDelete);
             return true;
-        } catch (Exception e) {
-           return false;
         }
+        return false;
     }
 
     public Client updateClient(Long id, Client client) {
@@ -42,13 +43,35 @@ public class ClientService {
             if (client.getSecondLastName() != null) {
                 clientToUpdate.setSecondLastName(client.getSecondLastName());
             }
+            if (client.getAddress() != null) {
+                clientToUpdate.setAddress(client.getAddress());
+            }
+            if (client.getPhone() != null) {
+                clientToUpdate.setPhone(client.getPhone());
+            }
+            if (client.getEmail() != null) {
+                clientToUpdate.setEmail(client.getEmail());
+            }
             return clientRepository.save(clientToUpdate);
         }
         return null;
     }
 
     public List<Client> findAll() {
-        return clientRepository.findAll();
+        return clientRepository.findByStatus(true);
+    }
+
+    public Client findByDni(String dni) {
+        return clientRepository.findByDni(dni).orElse(null);
+    }
+
+
+    public Client findByPhone(String phone) {
+        return clientRepository.findByPhone(phone).orElse(null);
+    }
+
+    public Client findByEmail(String email) {
+        return clientRepository.findByEmail(email).orElse(null);
     }
 }
 

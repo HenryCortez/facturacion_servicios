@@ -6,71 +6,56 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"dni"}), 
+@UniqueConstraint(columnNames = {"email"}), @UniqueConstraint(columnNames = {"phone"})
+})
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 10)
+    @Column(nullable = false)
     private String dni;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column( length = 20, nullable = false)
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(length = 10)
+    @Column(nullable = true)
     private String secondName;
 
-    @Column(length = 10)
+    @Column(nullable = true)
     private String secondLastName;
 
-    public String getFirstName() {
-        return firstName;
-    }
+    @Column(nullable = false)
+    private String address;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    @Column(nullable = false)
+    private String phone;
 
-    public String getLastName() {
-        return lastName;
-    }
+    @Column(nullable = false)
+    private String email;
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    @Column(nullable = false)
+    private String dniType;
 
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public String getSecondLastName() {
-        return secondLastName;
-    }
-
-    public void setSecondLastName(String secondLastName) {
-        this.secondLastName = secondLastName;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public Long getId() {
-        return id;
-    }
+    @Column(columnDefinition = "boolean default true")
+    @Builder.Default
+    private boolean status = true;
 
     
 }
