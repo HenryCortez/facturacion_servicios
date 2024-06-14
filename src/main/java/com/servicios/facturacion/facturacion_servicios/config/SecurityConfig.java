@@ -51,9 +51,9 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.POST, "/api/productos/**").hasAuthority("admin")
                             .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasAuthority("admin")
                             
-
-                            .requestMatchers("/api/sales/**").permitAll()
-                            .requestMatchers("/api/sales").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/sales/**").hasAnyAuthority("admin", "cajero")
+                            .requestMatchers(HttpMethod.POST, "/api/sales/**").hasAnyAuthority("admin", "cajero")
+                            .requestMatchers(HttpMethod.PUT, "/api/sales/**").hasAnyAuthority("admin", "cajero")
                             .anyRequest().authenticated())
                     .sessionManagement(sessionManagement -> 
                     sessionManagement

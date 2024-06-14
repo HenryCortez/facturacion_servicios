@@ -30,4 +30,10 @@
 /api/productos/iva -- admin -- put // cambia el iva de todos los productos existentes.
 /api/productos/name/{name} -- admin, cajero -- get
 
-/api/sales
+/api/sales -- admin, cajero -- Get
+/api/sales -- admin, cajero -- post
+/api/sales/{id} -- admin, cajero -- Get
+/api/sales/client/{clientId} -- admin, cajero -- Get
+/api/sales/date-range -- admin, cajero -- Get
+/api/sales/date/{date} -- admin, cajero -- Get
+/api/sales/update-client -- admin, cajero -- put
