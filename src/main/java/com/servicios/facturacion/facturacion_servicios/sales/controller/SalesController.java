@@ -31,7 +31,7 @@ public class SalesController {
 
     @GetMapping()
     public List<Sale> getAllActiveSales() {
-        return salesService.getAllActiveSales();
+        return salesService.getAllSales();
     }
 
     @GetMapping("/{id}")

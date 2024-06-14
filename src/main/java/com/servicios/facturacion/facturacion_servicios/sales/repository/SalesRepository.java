@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SalesRepository extends JpaRepository<Sale, Long> {
-    List<Sale> findByStatusTrue();
-    Optional<Sale> findByIdAndStatusTrue(Long id);
-    List<Sale> findByClientIdAndStatusTrue(Long clientId);
+    List<Sale> findByClientId(Long clientId);
     List<Sale> findByDateSale(LocalDate dateSale);
     List<Sale> findByDateSaleBetween(LocalDate startDate, LocalDate endDate);
     

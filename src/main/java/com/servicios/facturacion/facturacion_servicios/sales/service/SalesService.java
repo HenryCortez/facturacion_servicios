@@ -29,12 +29,12 @@ public class SalesService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Sale> getAllActiveSales() {
-        return salesRepository.findByStatusTrue();
+    public List<Sale> getAllSales() {
+        return salesRepository.findAll();
     }
 
     public Optional<Sale> getSaleById(Long id) {
-        return salesRepository.findByIdAndStatusTrue(id);
+        return salesRepository.findById(id);
     }
 
     public List<Sale> getSalesByClientId(Long clientId) {
@@ -45,7 +45,7 @@ public class SalesService {
             throw new RuntimeException("Client no está activo");
         }
 
-        return salesRepository.findByClientIdAndStatusTrue(clientId);
+        return salesRepository.findByClientId(clientId);
     }
 
     public List<Sale> getSalesByDate(LocalDate dateSale) {
@@ -57,6 +57,7 @@ public class SalesService {
     }
 
     public Sale createSale(SaleRequestDTO saleRequestDTO) {
+    
         Client client;
         if (saleRequestDTO.getClientId() == 0) {
             client = clientRepository.findById(0L)
