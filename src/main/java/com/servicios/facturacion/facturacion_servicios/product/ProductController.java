@@ -36,6 +36,8 @@ public class ProductController {
     @Autowired
     private IvaRepository ivaRepository;
     @Autowired
+    private ProductRepository productRepository;
+    @Autowired
     private S3Service s3Service;
 
     @GetMapping()
@@ -60,6 +62,7 @@ public class ProductController {
     @PostMapping()
     public ResponseEntity<Product> saveProduct(@RequestBody ProductDto productRequest) {
         try {
+            Product pro = productRepository.findById(5l).orElse(null);
             byte[] imageBytes = Base64.getDecoder().decode(productRequest.getImage());
             // Crea un MultipartFile a partir del array de bytes
             MultipartFile imagen = new MockMultipartFile(
@@ -73,7 +76,7 @@ public class ProductController {
             product.setImagen(s3Service.uploadFile(imagen));
             product.setStock(productRequest.getStock());
             product.setPrice(productRequest.getPrice());
-            product.setIva(ivaRepository.findById(2L).orElse(null));
+            product.setIva(pro.getIva());
             return ResponseEntity.ok(productService.saveProduct(product));
             // Ahora puedes usar el array de bytes...
         } catch (Exception e) {

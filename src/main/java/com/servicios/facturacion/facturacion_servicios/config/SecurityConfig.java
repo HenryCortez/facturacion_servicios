@@ -33,16 +33,24 @@ public class SecurityConfig {
                             .requestMatchers("/auth/login").permitAll()
                             .requestMatchers("/auth/register").hasAuthority("admin")
                             .requestMatchers("/auth/{username}").hasAuthority("admin")
-                            .requestMatchers("/auth").permitAll()
+                            .requestMatchers("/auth").hasAuthority("admin")
                             
                             .requestMatchers(HttpMethod.POST, "/api/client/**").hasAnyAuthority("admin", "cajero")
                             .requestMatchers(HttpMethod.PUT, "/api/client/**").hasAuthority("admin")
                             .requestMatchers(HttpMethod.DELETE, "/api/client/**").hasAuthority("admin")
                             .requestMatchers(HttpMethod.GET, "/api/client/**").hasAnyAuthority("admin", "cajero")
 
-                            .requestMatchers("/api/productos/**").permitAll()
-                            .requestMatchers("/api/category/**").permitAll()
+                            .requestMatchers("/api/iva").hasAnyAuthority("admin", "cajero")
 
+                            .requestMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("admin", "cajero")
+                            .requestMatchers(HttpMethod.POST, "/api/category/**").hasAuthority("admin")
+                            .requestMatchers(HttpMethod.PUT, "/api/category/**").hasAuthority("admin")
+                            .requestMatchers(HttpMethod.DELETE, "/api/category/**").hasAuthority("admin")
+
+                            .requestMatchers(HttpMethod.GET, "/api/productos/**").hasAnyAuthority("admin", "cajero")
+                            .requestMatchers(HttpMethod.POST, "/api/productos/**").hasAuthority("admin")
+                            .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasAuthority("admin")
+                            
 
                             .requestMatchers("/api/sales/**").permitAll()
                             .requestMatchers("/api/sales").permitAll()
