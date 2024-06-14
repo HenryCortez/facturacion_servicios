@@ -48,16 +48,34 @@ public class SalesService {
         return salesRepository.findByClientId(clientId);
     }
 
-    public List<Sale> getSalesByDate(LocalDate dateSale) {
-        return salesRepository.findByDateSale(dateSale);
+    public List<Sale> getSalesByDate(LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        return salesRepository.findByDateSaleBetween(startOfDay, endOfDay);
     }
 
-    public List<Sale> getSalesByDateRange(LocalDate startDate, LocalDate endDate) {
-        return salesRepository.findByDateSaleBetween(startDate, endDate);
+    public List<Sale> getSalesByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        LocalDateTime startOfDay = startDate;
+        LocalDateTime endOfDay = endDate.plusDays(1).minusNanos(1);
+
+        return salesRepository.findByDateSaleBetween(startOfDay, endOfDay);
+    }
+
+    public Sale updateSaleClient(Long saleId, Long newClientId) {
+        Sale sale = salesRepository.findById(saleId)
+                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
+
+        Client newClient = clientRepository.findById(newClientId)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        if (!newClient.isStatus()) {
+            throw new RuntimeException("Cliente no está activo");
+        }
+
+        sale.setClient(newClient);
+        return salesRepository.save(sale);
     }
 
     public Sale createSale(SaleRequestDTO saleRequestDTO) {
-    
+
         Client client;
         if (saleRequestDTO.getClientId() == 0) {
             client = clientRepository.findById(0L)
