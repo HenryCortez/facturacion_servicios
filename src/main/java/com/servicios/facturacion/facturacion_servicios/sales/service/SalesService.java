@@ -9,7 +9,6 @@ import com.servicios.facturacion.facturacion_servicios.sales.model.SalesDetails;
 import com.servicios.facturacion.facturacion_servicios.sales.repository.SalesDetailsRepository;
 import com.servicios.facturacion.facturacion_servicios.sales.repository.SalesRepository;
 import java.util.List;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
