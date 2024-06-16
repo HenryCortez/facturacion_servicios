@@ -36,15 +36,15 @@ public class SalesService {
         return salesRepository.findById(id);
     }
 
-    public List<Sale> getSalesByClientId(Long clientId) {
-        Client client = clientRepository.findById(clientId)
+    public List<Sale> getSalesByClientDni(String clientDni) {
+        Client client = clientRepository.findByDni(clientDni)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         if (!client.isStatus()) {
             throw new RuntimeException("Client no está activo");
         }
 
-        return salesRepository.findByClientId(clientId);
+        return salesRepository.findByClientDni(clientDni);
     }
 
     public List<Sale> getSalesByDate(LocalDateTime startOfDay, LocalDateTime endOfDay) {
@@ -58,11 +58,11 @@ public class SalesService {
         return salesRepository.findByDateSaleBetween(startOfDay, endOfDay);
     }
 
-    public Sale updateSaleClient(Long saleId, Long newClientId) {
+    public Sale updateSaleClient(Long saleId, String newClientDni) {
         Sale sale = salesRepository.findById(saleId)
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
 
-        Client newClient = clientRepository.findById(newClientId)
+        Client newClient = clientRepository.findByDni(newClientDni)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         if (!newClient.isStatus()) {
@@ -76,11 +76,11 @@ public class SalesService {
     public Sale createSale(SaleRequestDTO saleRequestDTO) {
 
         Client client;
-        if (saleRequestDTO.getClientId() == 0) {
-            client = clientRepository.findById(0L)
+        if (saleRequestDTO.getClientDni().equals("9999999999999")) {
+            client = clientRepository.findByDni("9999999999999")
                     .orElseThrow(() -> new RuntimeException("Consumidor final no encontrado"));
         } else {
-            client = clientRepository.findById(saleRequestDTO.getClientId())
+            client = clientRepository.findByDni(saleRequestDTO.getClientDni())
                     .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
             if (!client.isStatus()) {
                 throw new RuntimeException("Cliente no está activo");

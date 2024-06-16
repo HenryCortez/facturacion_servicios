@@ -52,10 +52,10 @@ public class SalesController {
         }
     }
 
-    @GetMapping("/client/{clientId}")
-    public ResponseEntity<?> getSalesByClientId(@PathVariable Long clientId) {
+    @GetMapping("/client/{clientDni}")
+    public ResponseEntity<?> getSalesByClientId(@PathVariable String clientDni) {
         try {
-            List<Sale> sales = salesService.getSalesByClientId(clientId);
+            List<Sale> sales = salesService.getSalesByClientDni(clientDni);
             return ResponseEntity.ok(sales);
         } catch (CustomBusinessException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
@@ -121,7 +121,7 @@ public class SalesController {
     public ResponseEntity<?> updateSaleClient(@RequestBody UpdateSaleClientDTO updateSaleClientDTO) {
         try {
             Sale updatedSale = salesService.updateSaleClient(updateSaleClientDTO.getSaleId(),
-                    updateSaleClientDTO.getNewClientId());
+                    updateSaleClientDTO.getNewClientDni());
             return ResponseEntity.ok(updatedSale);
         } catch (CustomBusinessException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());

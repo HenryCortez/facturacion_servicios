@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateSaleClientDTO {
     private Long saleId;
-    private Long newClientId;
+    private String newClientDni;
 
 }

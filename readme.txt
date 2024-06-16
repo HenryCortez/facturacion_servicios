@@ -88,7 +88,7 @@
 /api/sales -- admin, cajero -- Get
 /api/sales -- admin, cajero -- post
 {
-    "clientId": 0, para consumidor final
+    "clientDni": "1805474544", para consumidor final
     "saleDetails": [
         {
             "productId": 4,
@@ -107,5 +107,5 @@
 /api/sales/update-client -- admin, cajero -- put
 {
     "saleId": 1,
-    "newClientId": 4
+    "newClientDni":  "1805474544"
 }
