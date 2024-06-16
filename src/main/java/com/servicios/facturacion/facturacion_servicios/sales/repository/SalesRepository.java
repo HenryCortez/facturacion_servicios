@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SalesRepository extends JpaRepository<Sale, Long> {
-    List<Sale> findByClientId(Long clientId);
+    List<Sale> findByClientDni(String clientDni);
     List<Sale> findByDateSale(LocalDateTime dateSale);
     List<Sale> findByDateSaleBetween(LocalDateTime startDate, LocalDateTime endDate);
     
