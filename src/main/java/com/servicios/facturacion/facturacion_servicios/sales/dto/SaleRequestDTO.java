@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaleRequestDTO {
-    private Long clientId;
+    private String clientDni;
     private List<SaleDetailDTO> saleDetails;
 }
