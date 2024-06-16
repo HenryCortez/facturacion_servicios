@@ -68,8 +68,8 @@ public class ClientController {
         }else if (client.getDniType().toLowerCase().equals("ruc")){
             if (client.getDni().length() != 13 || 
             !Validator.isValidPasaporte(client.getDni().substring(0, 10))
-            || !client.getDni().substring(10, 13).equals("001") 
-            || !client.getDni().substring(10, 13).equals("002") ) {
+            || (!client.getDni().substring(10, 13).equals("001") && 
+            !client.getDni().substring(10, 13).equals("002")) ) {
                 return ResponseEntity.badRequest().build();
             }
         }else{
