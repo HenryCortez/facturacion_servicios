@@ -13,7 +13,7 @@ public class CrossConfig implements WebMvcConfigurer{
             @Override
             public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*") // URL del frontend de React
+                        .allowedOrigins("http://localhost:3000") // URL del frontend de React
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
